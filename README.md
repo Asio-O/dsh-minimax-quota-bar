@@ -59,9 +59,14 @@ The display uses three color thresholds:
 - `> 65% && ≤ 85%` → orange
 - `> 85%` → red
 
-## Caching
+## Caching and refresh
 
-The host caches one successful response per (apiKey, endpoint) for **5 minutes** to avoid MiniMax rate limits. The client polls every **30 seconds** and reads from the cache, so each user-facing refresh does not necessarily hit the upstream API.
+- The host caches one successful response per (apiKey, endpoint) for **5 minutes**.
+- The host listens for `agent/turn-stopping` and **proactively refreshes** the cache at the end of every agent turn. The next client poll sees fresh data without waiting for a fixed interval.
+- The client falls back to polling every **60 seconds** to catch edge cases (idle session, model/region change).
+- Concurrent refreshes share one `inflight` Promise — no duplicate fetches when RPC and the turn listener fire together.
+
+Worst-case latency to a fresh number after a turn ends is **60s** (the fallback poll interval); typical latency is "the next time the user looks at the screen", usually a few seconds.
 
 ## Diagnostics
 
@@ -81,13 +86,14 @@ The Client UI intentionally collapses any failure to a single `?` so it does not
 .dsh-minimax-quota-bar/
 ├── package.json
 ├── README.md
+├── CHANGELOG.md
 ├── .gitignore
 └── packages/
-    ├── pkg-13.host.js
-    └── pkg-13.client.js
+    ├── pkg-13.host.js / pkg-13.client.js   # initial release
+    └── pkg-15.host.js / pkg-15.client.js   # current: turn-end refresh + 60s fallback
 ```
 
-`pkg-13` refers to the version of the plugin that first shipped the `remaining_percent` field handling. New versions of the plugin can be appended as `pkg-14`, `pkg-15`, … without overwriting old versions; each one is an immutable Cordis Package.
+Each numbered pair is one immutable Cordis Package. New versions are appended (e.g. `pkg-16.host.js`); existing files are never overwritten. Switch between them with `cordis_run` mode `update`, or roll back with mode `run` against an older Package.
 
 ## License
 
