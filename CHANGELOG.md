@@ -1,5 +1,11 @@
 # Changelog
 
+## pkg-16 — audit-driven cleanup
+
+- `cache` and `inflight` are now closure variables inside `apply(ctx)` so each Plugin run owns its own state and is GC'd on stop / update (pkg-13 → pkg-15 had them at module scope).
+- Region-aware endpoint ordering: providers like `minimax-cn` / `minimaxi` / `MiniMaxi` try `.com` first; everything else tries `.io` first. The other region is still attempted as a fallback when the first one fails.
+- Client captures the `styles.insert()` disposer and calls it when the Slot occupant unmounts, so Plugin stop / update no longer leaks the stylesheet.
+
 ## pkg-15 — turn-end proactive refresh + 60s fallback poll
 
 - Host listens for `agent/turn-stopping` and refreshes the cache after every agent turn, so the next client poll sees fresh data without a fixed-interval wait.

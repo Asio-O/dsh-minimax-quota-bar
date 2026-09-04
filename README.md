@@ -90,7 +90,8 @@ The Client UI intentionally collapses any failure to a single `?` so it does not
 ├── .gitignore
 └── packages/
     ├── pkg-13.host.js / pkg-13.client.js   # initial release
-    └── pkg-15.host.js / pkg-15.client.js   # current: turn-end refresh + 60s fallback
+    ├── pkg-15.host.js / pkg-15.client.js   # turn-end refresh + 60s fallback
+    └── pkg-16.host.js / pkg-16.client.js   # current: fiber-scoped state, region-aware endpoints
 ```
 
 Each numbered pair is one immutable Cordis Package. New versions are appended (e.g. `pkg-16.host.js`); existing files are never overwritten. Switch between them with `cordis_run` mode `update`, or roll back with mode `run` against an older Package.
