@@ -1,0 +1,16 @@
+{
+  "name": "dsh-minimax-quota-bar",
+  "version": "0.1.0",
+  "description": "DSH dynamic Cordis plugin that shows the MiniMax / MiniMaxi Token Plan 5-hour coding-plan quota USED percentage in the composer left row.",
+  "private": true,
+  "license": "MIT",
+  "author": "Asio-O",
+  "keywords": ["dsh", "cordis", "minimax", "minimaxi", "token-plan", "quota"],
+  "dsh": {
+    "plugin": {
+      "idPrefix": "tkmtr",
+      "name": "MiniMax Token Plan Quota Bar",
+      "purpose": "Show the MiniMax / MiniMaxi Token Plan 5-hour coding-plan quota USED percentage in the composer left row."
+    }
+  }
+}
